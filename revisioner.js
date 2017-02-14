@@ -289,10 +289,17 @@ var Revisioner = (function () {
 
     stack.push(file);
 
-    // Resolve hash for child references
-    if (Object.keys(file.revReferenceFiles).length > 0) {
+    var revReferenceFilesArray = Object.keys(file.revReferenceFiles);
 
-      for (var key in file.revReferenceFiles) {
+    // Resolve hash for child references
+    if (revReferenceFilesArray.length > 0) {
+      
+      // Do a basic alphabetical sort on referenced files, assuring same looping order between executions...
+      revReferenceFilesArray.sort();
+      
+      for( var i = 0, ii = revReferenceFilesArray.length; i<ii; i++ ){
+
+        var key = revReferenceFilesArray[i];
 
         // Prevent infinite loops caused by circular references, don't recurse if we've already encountered this file
         if (stack.indexOf(file.revReferenceFiles[key]) === -1) {
